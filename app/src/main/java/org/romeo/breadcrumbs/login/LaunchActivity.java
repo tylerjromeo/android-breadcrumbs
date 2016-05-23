@@ -1,11 +1,15 @@
-package org.romeo.breadcrumbs;
+package org.romeo.breadcrumbs.login;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
+import org.romeo.breadcrumbs.R;
+
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +21,8 @@ import butterknife.ButterKnife;
 
 public class LaunchActivity extends AppCompatActivity {
 
+    private static final String TAG = "LaunchActivity";
+
     @BindView(R.id.login_email) EditText emailInput;
     @BindView(R.id.login_password) EditText passwordInput;
     @BindView(R.id.login_submit_button) Button submitButton;
@@ -25,35 +31,34 @@ public class LaunchActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authListener;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
         ButterKnife.bind(this);
 
+        //TODO: check login token and redirect if it exists
         auth = FirebaseAuth.getInstance();
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Toast.makeText(LaunchActivity.this, "onAuthStateChanged:signed_in:" + user.getUid(), Toast.LENGTH_LONG).show();
-                } else {
-                    // User is signed out
-                    Toast.makeText(LaunchActivity.this, "onAuthStateChanged:signed_out", Toast.LENGTH_LONG).show();
-                }
-            }
-        };
+        authListener = new DatastoreAuthListener(this);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = emailInput.getText().toString();
                 String password = passwordInput.getText().toString();
-                auth.signInWithEmailAndPassword(email, password);
-//                Toast.makeText(LaunchActivity.this, email + " " + password, Toast.LENGTH_LONG).show();
+                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(
+                        LaunchActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (!task.isSuccessful()) {
+                                    Log.d(TAG, "signInWithEmail", task.getException());
+                                    Toast.makeText(LaunchActivity.this, R.string.auth_failed,
+                                            Toast.LENGTH_SHORT).show();
+                                } else {
+                                    //TODO navigate to main activity
+                                }
+                            }
+                        });
             }
         });
     }
