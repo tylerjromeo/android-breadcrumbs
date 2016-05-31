@@ -5,12 +5,11 @@ import org.romeo.breadcrumbs.di.ApplicationModule;
 import org.romeo.breadcrumbs.di.DaggerApplicationComponent;
 
 import android.app.Application;
-import android.support.multidex.MultiDexApplication;
 
 /**
  * User: tylerromeo Date: 5/29/16 Time: 8:34 PM
  */
-public class BreadCrumbsApplication extends MultiDexApplication {
+public class BreadCrumbsApplication extends Application {
 
     private ApplicationComponent appComponent;
 
