@@ -3,10 +3,13 @@ package org.romeo.breadcrumbs.login;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.romeo.breadcrumbs.BreadCrumbsApplication;
 import org.romeo.breadcrumbs.persistence.Datastore;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+
+import javax.inject.Inject;
 
 /**
  * User: tylerromeo Date: 5/22/16 Time: 8:27 PM
@@ -14,11 +17,12 @@ import android.support.annotation.NonNull;
 public class DatastoreAuthListener implements FirebaseAuth.AuthStateListener {
 
     private Context context;
-    private Datastore datastore;
+    @Inject
+    Datastore datastore;
 
     public DatastoreAuthListener(Context context) {
         this.context = context;
-        this.datastore = new Datastore(context);
+        ((BreadCrumbsApplication) context.getApplicationContext()).getAppComponent().inject(this);
     }
 
     @Override
