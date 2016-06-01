@@ -1,6 +1,9 @@
 package org.romeo.breadcrumbs.di;
 
-import org.romeo.breadcrumbs.login.DatastoreAuthListener;
+import com.google.firebase.auth.FirebaseAuth;
+
+import org.romeo.breadcrumbs.login.LaunchActivity;
+import org.romeo.breadcrumbs.login.firebase.DatastoreAuthListener;
 import org.romeo.breadcrumbs.persistence.Datastore;
 
 import javax.inject.Singleton;
@@ -16,6 +19,9 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     Datastore getDatastore();
+    FirebaseAuth getFirebaseAuth();
 
     void inject(DatastoreAuthListener datastoreAuthListener);
+
+    void inject(LaunchActivity launchActivity);
 }

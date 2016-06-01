@@ -1,9 +1,10 @@
 package org.romeo.breadcrumbs.di;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.romeo.breadcrumbs.persistence.Datastore;
 
 import android.app.Application;
-import android.content.Context;
 
 import javax.inject.Singleton;
 
@@ -35,4 +36,9 @@ public class ApplicationModule {
         return new Datastore(application);
     }
 
+    @Provides
+    @Singleton
+    FirebaseAuth provideFirebaseAuth() {
+        return FirebaseAuth.getInstance();
+    }
 }

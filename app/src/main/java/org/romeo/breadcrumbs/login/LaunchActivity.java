@@ -5,7 +5,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.romeo.breadcrumbs.BreadCrumbsApplication;
 import org.romeo.breadcrumbs.R;
+import org.romeo.breadcrumbs.login.firebase.DatastoreAuthListener;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +31,8 @@ public class LaunchActivity extends AppCompatActivity {
     @BindView(R.id.login_password) EditText passwordInput;
     @BindView(R.id.login_submit_button) Button submitButton;
 
-    private FirebaseAuth auth;
+    @Inject
+    FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
 
 
@@ -36,9 +41,8 @@ public class LaunchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
         ButterKnife.bind(this);
+        ((BreadCrumbsApplication) getApplicationContext()).getAppComponent().inject(this);
 
-        //TODO: check login token and redirect if it exists
-        auth = FirebaseAuth.getInstance();
         authListener = new DatastoreAuthListener(this);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +60,7 @@ public class LaunchActivity extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
                                 } else {
                                     //TODO navigate to main activity
+                                   Toast.makeText(LaunchActivity.this, "navigate to main activity", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

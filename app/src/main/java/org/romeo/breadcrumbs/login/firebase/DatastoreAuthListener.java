@@ -1,4 +1,4 @@
-package org.romeo.breadcrumbs.login;
+package org.romeo.breadcrumbs.login.firebase;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
